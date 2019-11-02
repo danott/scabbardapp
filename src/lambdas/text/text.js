@@ -1,29 +1,29 @@
-const axios = require("axios");
+const axios = require("axios")
 
 exports.handler = async function(event, context) {
-  const URL = `https://api.esv.org/v3/passage/text/`;
-  const { ESV_API_AUTHORIZATION_TOKEN } = process.env;
-  const clientParams = JSON.parse(event.body);
+  const URL = `https://api.esv.org/v3/passage/text/`
+  const { ESV_API_AUTHORIZATION_TOKEN } = process.env
+  const clientParams = JSON.parse(event.body)
 
-  const headers = { Authorization: `Token ${ESV_API_AUTHORIZATION_TOKEN}` };
+  const headers = { Authorization: `Token ${ESV_API_AUTHORIZATION_TOKEN}` }
   const params = Object.assign(
     {},
     esvParamDefaults,
     scabbardParamDefaults,
-    clientParams
-  );
+    clientParams,
+  )
 
   try {
-    const { data } = await axios.get(URL, { headers, params });
-    return { statusCode: 200, body: JSON.stringify(data) };
+    const { data } = await axios.get(URL, { headers, params })
+    return { statusCode: 200, body: JSON.stringify(data) }
   } catch (error) {
-    const { status, statusText, headers, data } = error.response;
+    const { status, statusText, headers, data } = error.response
     return {
       statusCode: error.response.status,
-      body: JSON.stringify({ status, statusText, headers, data })
-    };
+      body: JSON.stringify({ status, statusText, headers, data }),
+    }
   }
-};
+}
 
 const scabbardParamDefaults = {
   "include-first-verse-number": false,
@@ -31,8 +31,8 @@ const scabbardParamDefaults = {
   "include-heading-horizontal-lines": false,
   "include-headings": false,
   "include-passage-horizontal-lines": false,
-  "include-verse-numbers": false
-};
+  "include-verse-numbers": false,
+}
 
 const esvParamDefaults = {
   "horizontal-line-length": 55, // Controls the length of the line for include-passage-horizontal-lines and include-heading-horizontal-lines.
@@ -53,5 +53,5 @@ const esvParamDefaults = {
   "indent-poetry": true, // Controls indentation of poetry lines.
   "indent-psalm-doxology": 30, // Controls how many indentation characters are used for Psalm doxologies.
   "indent-using": "space", // Controls indentation. Must be space or tab.
-  "line-length": 0 // Controls how long a line can be before it is wrapped. Use 0 for unlimited line lengths.
-};
+  "line-length": 0, // Controls how long a line can be before it is wrapped. Use 0 for unlimited line lengths.
+}
