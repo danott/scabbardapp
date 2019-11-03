@@ -20,7 +20,7 @@ function App() {
   const [loading, setLoading] = React.useState(false)
 
   function searchForPassage(passage) {
-    const query = prompt("📖Search for a passage by canonical reference")
+    const query = prompt(`📖 What passage? (Example: "John 3:16"`)
     if (query) {
       setLoading(true)
       fetch(`/api/text`, {
@@ -36,7 +36,7 @@ function App() {
             setPassages(uniq([...passages, passage]))
           } else {
             alert(
-              `🙅‍♀ No passages found for "${query}". Enter a canonical reference like "John 3:16".`,
+              `🙅‍♀ No passages found for "${query}". Enter a canonical reference such as "John 3:16".`,
             )
           }
         })
@@ -49,8 +49,10 @@ function App() {
   }
 
   function removePassage(passage) {
+    const { title } = parsePassage(passage)
+
     // eslint-disable-next-line no-restricted-globals
-    if (confirm("🗑 This cannot be undone")) {
+    if (confirm(`🗑 Are you sure you want to remove ${title} from the list?`)) {
       setPassages(passages.filter((candidate) => candidate !== passage))
       setSelected(null)
     }
@@ -168,7 +170,7 @@ function BlankState({ onSearch }) {
       <div>
         <p>
           Scabbard is a tool for memorizing passages of scripture. Search for
-          passages with a canonical refrence such as "Luke 11:11".
+          passages with a canonical refrence such as "John 3:16".
         </p>
 
         <p>
