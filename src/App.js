@@ -109,7 +109,7 @@ function Passage({ passage, onExit, onRemove }) {
   return (
     <div className="Screen">
       <h1>{title}</h1>
-      <div>{text}</div>
+      <div style={{ textAlign: "left" }}>{text}</div>
       <div className="ButtonGroup">
         <button className="Button" onClick={onExit}>
           <span role="img" aria-label="Carriage return arrow">
