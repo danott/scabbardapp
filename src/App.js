@@ -27,8 +27,7 @@ function App() {
       })
         .then((r) => r.json())
         .then((payload) => {
-          console.log(payload)
-
+          console.info(payload)
           const passage = payload.passages[0]
           if (passage) {
             setSelected(passage)
@@ -41,7 +40,7 @@ function App() {
         })
         .catch((error) => {
           console.log(error)
-          alert("An error occurred while searching. Try again soon.")
+          alert("😢 An error occurred while searching. Try again soon.")
         })
     }
   }
@@ -54,22 +53,24 @@ function App() {
     }
   }
 
+  const showBlankSlate = passages.length === 0
+
   return (
     <div className="App">
-      {selected ? (
+      {showBlankSlate ? (
+        <BlankState onSearch={searchForPassage} />
+      ) : selected ? (
         <Passage
           passage={selected}
           onExit={() => setSelected(null)}
           onRemove={() => removePassage(selected)}
         />
-      ) : passages.length > 0 ? (
+      ) : (
         <PassageList
           passages={passages}
           onSelect={setSelected}
           onSearch={searchForPassage}
         />
-      ) : (
-        <BlankState onSearch={searchForPassage} />
       )}
     </div>
   )
@@ -78,11 +79,23 @@ function App() {
 function Passage({ passage, onExit, onRemove }) {
   const { title, text } = parsePassage(passage)
   return (
-    <div>
+    <div className="Screen">
       <h1>{title}</h1>
       <div>{text}</div>
-      <button onClick={onExit}>🔙</button>
-      <button onClick={onRemove}>🗑</button>
+      <div className="ButtonGroup">
+        <button className="Button" onClick={onExit}>
+          <span role="img" aria-label="Carriage return arrow">
+            ⏎
+          </span>{" "}
+          Return to list
+        </button>
+        <button className="Button" onClick={onRemove}>
+          <span role="img" aria-label="Trash can">
+            🗑
+          </span>{" "}
+          Remove from list
+        </button>
+      </div>
     </div>
   )
 }
@@ -90,37 +103,60 @@ function Passage({ passage, onExit, onRemove }) {
 function PassageList({ passages, onSearch, onSelect }) {
   function PassageListItem({ passage }) {
     const { title } = parsePassage(passage)
-    return <li onClick={() => onSelect(passage)}>{title}</li>
+    return (
+      <li>
+        <button className="TextButton" onClick={() => onSelect(passage)}>
+          {title}
+        </button>
+      </li>
+    )
   }
 
   return (
-    <ul>
-      {passages.map((passage) => (
-        <PassageListItem passage={passage} />
-      ))}
-      <li>
-        <button onClick={onSearch}>
+    <div className="Screen">
+      <h1>Passages</h1>
+      <ul>
+        {passages.map((passage) => (
+          <PassageListItem passage={passage} />
+        ))}
+      </ul>
+      <div className="ButtonGroup">
+        <button className="Button" onClick={onSearch}>
           <span role="img" aria-label="Plus sign">
             ➕
-          </span>
+          </span>{" "}
           Add passage
         </button>
-      </li>
-    </ul>
+      </div>
+    </div>
   )
 }
 
 function BlankState({ onSearch }) {
   return (
-    <div>
-      {" "}
-      <h1>There are no passages</h1>{" "}
-      <button onClick={onSearch}>
-        <span role="img" aria-label="Plus sign">
-          ➕
-        </span>
-        Add your first passage
-      </button>
+    <div className="Screen">
+      <h1>Scabbard</h1>
+
+      <div style={{ textAlign: "left" }}>
+        <p>
+          Scabbard is a tool for memorizing passages of scripture. Search for
+          passages with a canonical refrence such as "Luke 11:11".
+        </p>
+
+        <p>
+          There's no accounts for syncing devices or any of that. The goal is to
+          have your brain remember these things, rather than computers.
+        </p>
+      </div>
+
+      <div className="ButtonGroup">
+        <button className="Button" onClick={onSearch}>
+          <span role="img" aria-label="Plus sign">
+            ➕
+          </span>{" "}
+          Add a passage
+        </button>
+      </div>
     </div>
   )
 }
