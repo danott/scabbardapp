@@ -109,7 +109,7 @@ function Passage({ passage, onExit, onRemove }) {
   return (
     <div className="Screen">
       <h1>{title}</h1>
-      <div style={{ textAlign: "left" }}>{text}</div>
+      <div>{text}</div>
       <div className="ButtonGroup">
         <button className="Button" onClick={onExit}>
           <span role="img" aria-label="Carriage return arrow">
@@ -165,7 +165,7 @@ function BlankState({ onSearch }) {
     <div className="Screen">
       <h1>Scabbard</h1>
 
-      <div style={{ textAlign: "left" }}>
+      <div>
         <p>
           Scabbard is a tool for memorizing passages of scripture. Search for
           passages with a canonical refrence such as "Luke 11:11".
