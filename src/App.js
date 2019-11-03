@@ -17,10 +17,12 @@ function uniq(array) {
 function App() {
   const [passages, setPassages] = useLocalStorage("passages", [])
   const [selected, setSelected] = useLocalStorage("selected", null)
+  const [loading, setLoading] = React.useState(false)
 
   function searchForPassage(passage) {
     const query = prompt("📖Search for a passage by canonical reference")
     if (query) {
+      setLoading(true)
       fetch(`/api/text`, {
         method: "POST",
         body: JSON.stringify({ q: query }),
@@ -42,6 +44,7 @@ function App() {
           console.log(error)
           alert("😢 An error occurred while searching. Try again soon.")
         })
+        .finally(() => setLoading(false))
     }
   }
 
@@ -57,7 +60,9 @@ function App() {
 
   return (
     <div className="App">
-      {showBlankSlate ? (
+      {loading ? (
+        <Loading />
+      ) : showBlankSlate ? (
         <BlankState onSearch={searchForPassage} />
       ) : selected ? (
         <Passage
@@ -66,16 +71,39 @@ function App() {
           onRemove={() => removePassage(selected)}
         />
       ) : (
-        <PassageList
-          passages={passages}
-          onSelect={setSelected}
-          onSearch={searchForPassage}
-        />
+        <>
+          <PassageList
+            passages={passages}
+            onSelect={setSelected}
+            onSearch={searchForPassage}
+          />
+        </>
       )}
     </div>
   )
 }
 
+export function Loading({ verb = "Loading" }) {
+  const books = ["📕", "📒", "📙", "📗", "📘", "📓", "📔"]
+  const [step, setStep] = React.useState(0)
+  React.useEffect(() => {
+    const timeout = setTimeout(() => setStep((step + 1) % books.length), 200)
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [books.length, step])
+
+  return (
+    <div class="Screen">
+      <h1>
+        <span role="img" aria-label="Book icon">
+          {books[step]}
+        </span>{" "}
+        {verb}
+      </h1>
+    </div>
+  )
+}
 function Passage({ passage, onExit, onRemove }) {
   const { title, text } = parsePassage(passage)
   return (
