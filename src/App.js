@@ -20,7 +20,7 @@ function App() {
   const [loading, setLoading] = React.useState(false)
 
   function searchForPassage(passage) {
-    const query = prompt(`📖 What passage? (Example: "John 3:16"`)
+    const query = prompt(`📖 What passage? (Example: "John 3:16")`)
     if (query) {
       setLoading(true)
       fetch(`/api/text`, {
