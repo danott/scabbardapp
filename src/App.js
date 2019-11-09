@@ -73,13 +73,11 @@ function App() {
           onRemove={() => removePassage(selected)}
         />
       ) : (
-        <>
-          <PassageList
-            passages={passages}
-            onSelect={setSelected}
-            onSearch={searchForPassage}
-          />
-        </>
+        <PassageList
+          passages={passages}
+          onSelect={setSelected}
+          onSearch={searchForPassage}
+        />
       )}
     </div>
   )
