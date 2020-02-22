@@ -1,5 +1,6 @@
 import React from "react"
 import useLocalStorage from "./hooks/useLocalStorage"
+import useOnline from "./hooks/useOnline"
 
 import "./App.css"
 
@@ -19,9 +20,20 @@ function App() {
   const [selected, setSelected] = useLocalStorage("selected", null)
   const [loading, setLoading] = React.useState(false)
 
+  function isConnectionOkay() {
+    if (!window.navigator.onLine) {
+      alert("Cannot add a passage because there's no network connection")
+      return false
+    }
+    return true
+  }
+
   function searchForPassage(passage) {
+    if (!isConnectionOkay()) return
     const query = prompt(`📖 What passage? (Example: "John 3:16")`)
+
     if (query) {
+      if (!isConnectionOkay()) return
       setLoading(true)
       fetch(`/api/text`, {
         method: "POST",
