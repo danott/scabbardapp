@@ -47,13 +47,19 @@ function render() {
   document.title = "Scabbard"
   if (passages.length === 0) return show("blank")
 
+  $("#count").textContent = passages.length
   $("#passages").replaceChildren(
     ...passages.map((passage, i) => {
-      const link = document.createElement("a")
-      link.href = `#/passage/${i}`
-      link.textContent = parse(passage).title
+      const { title, text } = parse(passage)
       const item = document.createElement("li")
-      item.append(link)
+      item.innerHTML = `
+        <a class="passage-card">
+          <span class="body"><span class="title"></span><span class="preview"></span></span>
+          <span class="chevron"><svg><use href="#i-chevron" /></svg></span>
+        </a>`
+      item.querySelector("a").href = `#/passage/${i}`
+      item.querySelector(".title").textContent = title
+      item.querySelector(".preview").textContent = text.replace(/\s+/g, " ")
       return item
     }),
   )
@@ -130,6 +136,31 @@ function removeCurrent() {
   location.hash = "#/"
 }
 
+// Settings. The accent color is the only one so far. index.html applies the
+// saved accent before the first paint; this keeps the radio buttons in step.
+
+const settings = $("#settings")
+const accents = [...settings.querySelectorAll("input[name=accent]")]
+
+function applyAccent() {
+  let saved = null
+  try {
+    saved = localStorage.getItem("accent")
+  } catch {}
+  // Fall back to the first (coral) if the saved one no longer exists.
+  const input = accents.find((input) => input.value === saved) || accents[0]
+  input.checked = true
+  document.documentElement.dataset.accent = input.value
+}
+
+settings.addEventListener("change", (event) => {
+  if (event.target.name !== "accent") return
+  try {
+    localStorage.setItem("accent", event.target.value)
+  } catch {}
+  applyAccent()
+})
+
 // Wiring
 
 form.addEventListener("submit", (event) => {
@@ -141,14 +172,30 @@ document.addEventListener("click", (event) => {
   const action = event.target.closest("[data-action]")?.dataset.action
   if (action === "add") openSearch()
   if (action === "cancel") dialog.close()
+  if (action === "settings") settings.showModal()
   if (action === "remove") removeCurrent()
 })
 
+// Tapping the dimmed backdrop closes a sheet.
+for (const sheet of [dialog, settings]) {
+  sheet.addEventListener("click", (event) => {
+    const box = sheet.getBoundingClientRect()
+    const inside =
+      event.clientX >= box.left && event.clientX <= box.right && event.clientY >= box.top && event.clientY <= box.bottom
+    if (!inside && event.target === sheet) sheet.close()
+  })
+}
+
 addEventListener("hashchange", render)
-addEventListener("storage", render) // another tab changed the list
+addEventListener("storage", () => {
+  // another tab changed the list or the accent color
+  render()
+  applyAccent()
+})
 
 // The old React version kept a "selected" key; it isn't needed anymore.
 localStorage.removeItem("selected")
+applyAccent()
 render()
 
 if ("serviceWorker" in navigator) {

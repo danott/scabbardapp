@@ -2,60 +2,144 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content="A tool for memorizing passages of scripture." />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f5f4f2" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f0f10" media="(prefers-color-scheme: dark)" />
     <title>Scabbard</title>
     <link rel="icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/logo192.png" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="stylesheet" href="/style.css" />
+    <script>
+      // Apply the saved accent color before the first paint.
+      try { document.documentElement.dataset.accent = localStorage.getItem("accent") || "coral" } catch {}
+    </script>
     <script type="module" src="/app.js"></script>
   </head>
   <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6" /></symbol>
+      <symbol id="i-back" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6" /></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3" /></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" /></symbol>
+      <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /></symbol>
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.5C10.5 5 8 4.5 3 4.5v14c5 0 7.5.5 9 2 1.5-1.5 4-2 9-2v-14c-5 0-7.5.5-9 2zM12 6.5v14" /></symbol>
+    </svg>
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="#/">
+          <span class="brand-mark"><svg><use href="#i-book" /></svg></span>
+          Scabbard
+        </a>
+        <button type="button" class="icon-button" data-action="settings" aria-label="Settings">
+          <svg><use href="#i-gear" /></svg>
+        </button>
+      </div>
+    </header>
+
     <main>
       <section id="blank" hidden>
-        <h1>Scabbard</h1>
-        <p>
-          Scabbard is a tool for memorizing passages of scripture. Search for
-          passages with a canonical reference such as “John 3:16”.
-        </p>
-        <p>
-          There are no accounts for syncing devices or any of that. The goal is
-          to have your brain remember these things, rather than computers.
-        </p>
-        <div class="buttons">
-          <button type="button" data-action="add">➕ Add a passage</button>
+        <div class="card hero">
+          <div class="hero-icon"><svg><use href="#i-book" /></svg></div>
+          <h1>Hide the word in your heart</h1>
+          <p>
+            Scabbard is a tool for memorizing passages of scripture. Search for
+            passages with a canonical reference such as “John 3:16”.
+          </p>
+          <p class="muted">
+            There are no accounts for syncing devices or any of that. The goal is
+            to have your brain remember these things, rather than computers.
+          </p>
+          <button type="button" class="primary block" data-action="add">
+            <svg><use href="#i-plus" /></svg> Add a passage
+          </button>
         </div>
       </section>
 
       <section id="list" hidden>
-        <h1>Passages</h1>
-        <ul id="passages"></ul>
-        <div class="buttons">
-          <button type="button" data-action="add">➕ Add passage</button>
+        <div class="heading-row">
+          <h1>Passages</h1>
+          <span id="count" class="pill-badge"></span>
+        </div>
+        <ul id="passages" class="cards"></ul>
+        <div class="dock">
+          <button type="button" class="primary block" data-action="add">
+            <svg><use href="#i-plus" /></svg> Add passage
+          </button>
         </div>
       </section>
 
       <section id="passage" hidden>
+        <a class="icon-button" href="#/" aria-label="Back to passages">
+          <svg><use href="#i-back" /></svg>
+        </a>
         <h1 id="passage-title"></h1>
-        <div id="passage-text"></div>
+        <div class="card">
+          <div id="passage-text"></div>
+        </div>
         <div class="buttons">
-          <a class="button" href="#/">⏎ Return to list</a>
-          <button type="button" data-action="remove">🗑 Remove from list</button>
+          <button type="button" class="danger" data-action="remove">
+            <svg><use href="#i-trash" /></svg> Remove from list
+          </button>
         </div>
       </section>
     </main>
 
     <dialog id="search">
       <form>
-        <label for="query">📖 What passage?</label>
-        <input id="query" name="q" required autocomplete="off" placeholder="John 3:16" />
+        <div class="grabber" aria-hidden="true"></div>
+        <label for="query" class="sheet-title">What passage?</label>
+        <input id="query" name="q" required autocomplete="off" placeholder="John 3:16" enterkeyhint="search" />
         <p id="search-error" role="alert"></p>
-        <div class="buttons">
-          <button type="submit">Add</button>
-          <button type="button" data-action="cancel">Cancel</button>
+        <div class="buttons stacked">
+          <button type="submit" class="primary block">Add</button>
+          <button type="button" class="secondary block" data-action="cancel">Cancel</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="settings" aria-labelledby="settings-title">
+      <form method="dialog">
+        <div class="grabber" aria-hidden="true"></div>
+        <h2 id="settings-title" class="sheet-title">Settings</h2>
+        <fieldset class="swatches">
+          <legend>Accent color</legend>
+          <label class="swatch" data-accent="coral">
+            <input type="radio" name="accent" value="coral" />
+            <span class="swatch-dot"><svg><use href="#i-check" /></svg></span>
+            Coral
+          </label>
+          <label class="swatch" data-accent="emerald">
+            <input type="radio" name="accent" value="emerald" />
+            <span class="swatch-dot"><svg><use href="#i-check" /></svg></span>
+            Emerald
+          </label>
+          <label class="swatch" data-accent="indigo">
+            <input type="radio" name="accent" value="indigo" />
+            <span class="swatch-dot"><svg><use href="#i-check" /></svg></span>
+            Indigo
+          </label>
+          <label class="swatch" data-accent="teal">
+            <input type="radio" name="accent" value="teal" />
+            <span class="swatch-dot"><svg><use href="#i-check" /></svg></span>
+            Teal
+          </label>
+          <label class="swatch" data-accent="amber">
+            <input type="radio" name="accent" value="amber" />
+            <span class="swatch-dot"><svg><use href="#i-check" /></svg></span>
+            Amber
+          </label>
+          <label class="swatch" data-accent="ink">
+            <input type="radio" name="accent" value="ink" />
+            <span class="swatch-dot"><svg><use href="#i-check" /></svg></span>
+            Ink
+          </label>
+        </fieldset>
+        <div class="buttons stacked">
+          <button class="secondary block">Done</button>
         </div>
       </form>
     </dialog>
