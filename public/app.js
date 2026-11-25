@@ -47,13 +47,19 @@ function render() {
   document.title = "Scabbard"
   if (passages.length === 0) return show("blank")
 
+  $("#count").textContent = passages.length
   $("#passages").replaceChildren(
     ...passages.map((passage, i) => {
-      const link = document.createElement("a")
-      link.href = `#/passage/${i}`
-      link.textContent = parse(passage).title
+      const { title, text } = parse(passage)
       const item = document.createElement("li")
-      item.append(link)
+      item.innerHTML = `
+        <a class="passage-card">
+          <span class="body"><span class="title"></span><span class="preview"></span></span>
+          <span class="chevron"><svg><use href="#i-chevron" /></svg></span>
+        </a>`
+      item.querySelector("a").href = `#/passage/${i}`
+      item.querySelector(".title").textContent = title
+      item.querySelector(".preview").textContent = text.replace(/\s+/g, " ")
       return item
     }),
   )
