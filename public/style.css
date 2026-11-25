@@ -99,8 +99,8 @@ svg {
 }
 
 .brand-mark svg {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.15rem;
+  height: 1.15rem;
 }
 
 @media (min-width: 40rem) {
@@ -166,8 +166,8 @@ p {
 }
 
 .hero-icon svg {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2rem;
+  height: 2rem;
 }
 
 .heading-row {
