@@ -136,22 +136,28 @@ function removeCurrent() {
   location.hash = "#/"
 }
 
-// Accent color. index.html applies the saved choice before the first paint.
+// Settings. The accent color is the only one so far. index.html applies the
+// saved accent before the first paint; this keeps the radio buttons in step.
 
-const accent = $("#accent")
+const settings = $("#settings")
+const accents = [...settings.querySelectorAll("input[name=accent]")]
 
 function applyAccent() {
   let saved = null
   try {
     saved = localStorage.getItem("accent")
   } catch {}
-  accent.value = saved || "coral"
-  if (!accent.value) accent.value = "coral" // an option that no longer exists
-  document.documentElement.dataset.accent = accent.value
+  // Fall back to the first (coral) if the saved one no longer exists.
+  const input = accents.find((input) => input.value === saved) || accents[0]
+  input.checked = true
+  document.documentElement.dataset.accent = input.value
 }
 
-accent.addEventListener("change", () => {
-  localStorage.setItem("accent", accent.value)
+settings.addEventListener("change", (event) => {
+  if (event.target.name !== "accent") return
+  try {
+    localStorage.setItem("accent", event.target.value)
+  } catch {}
   applyAccent()
 })
 
@@ -166,8 +172,19 @@ document.addEventListener("click", (event) => {
   const action = event.target.closest("[data-action]")?.dataset.action
   if (action === "add") openSearch()
   if (action === "cancel") dialog.close()
+  if (action === "settings") settings.showModal()
   if (action === "remove") removeCurrent()
 })
+
+// Tapping the dimmed backdrop closes a sheet.
+for (const sheet of [dialog, settings]) {
+  sheet.addEventListener("click", (event) => {
+    const box = sheet.getBoundingClientRect()
+    const inside =
+      event.clientX >= box.left && event.clientX <= box.right && event.clientY >= box.top && event.clientY <= box.bottom
+    if (!inside && event.target === sheet) sheet.close()
+  })
+}
 
 addEventListener("hashchange", render)
 addEventListener("storage", () => {
