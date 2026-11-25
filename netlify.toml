@@ -1,2 +1,10 @@
 [build]
   publish = "public"
+  # There's nothing to build. This overrides the old "yarn build" command
+  # saved in the Netlify dashboard.
+  command = "echo 'No build step'"
+
+[build.environment]
+  # Overrides the old Node 10 setting. Netlify runs functions on the same
+  # version, and netlify/functions/text.mjs needs Node 18 or later.
+  NODE_VERSION = "24"
