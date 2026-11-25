@@ -136,6 +136,25 @@ function removeCurrent() {
   location.hash = "#/"
 }
 
+// Accent color. index.html applies the saved choice before the first paint.
+
+const accent = $("#accent")
+
+function applyAccent() {
+  let saved = null
+  try {
+    saved = localStorage.getItem("accent")
+  } catch {}
+  accent.value = saved || "coral"
+  if (!accent.value) accent.value = "coral" // an option that no longer exists
+  document.documentElement.dataset.accent = accent.value
+}
+
+accent.addEventListener("change", () => {
+  localStorage.setItem("accent", accent.value)
+  applyAccent()
+})
+
 // Wiring
 
 form.addEventListener("submit", (event) => {
@@ -151,10 +170,15 @@ document.addEventListener("click", (event) => {
 })
 
 addEventListener("hashchange", render)
-addEventListener("storage", render) // another tab changed the list
+addEventListener("storage", () => {
+  // another tab changed the list or the accent color
+  render()
+  applyAccent()
+})
 
 // The old React version kept a "selected" key; it isn't needed anymore.
 localStorage.removeItem("selected")
+applyAccent()
 render()
 
 if ("serviceWorker" in navigator) {

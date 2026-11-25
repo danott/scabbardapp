@@ -11,6 +11,10 @@
     <link rel="apple-touch-icon" href="/logo192.png" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="stylesheet" href="/style.css" />
+    <script>
+      // Apply the saved accent color before the first paint.
+      try { document.documentElement.dataset.accent = localStorage.getItem("accent") || "coral" } catch {}
+    </script>
     <script type="module" src="/app.js"></script>
   </head>
   <body>
@@ -23,10 +27,24 @@
     </svg>
 
     <header class="topbar">
-      <a class="brand" href="#/">
-        <span class="brand-mark"><svg><use href="#i-book" /></svg></span>
-        Scabbard
-      </a>
+      <div class="topbar-inner">
+        <a class="brand" href="#/">
+          <span class="brand-mark"><svg><use href="#i-book" /></svg></span>
+          Scabbard
+        </a>
+        <label class="picker">
+          <span class="picker-dot" aria-hidden="true"></span>
+          <select id="accent" aria-label="Accent color">
+            <option value="coral">Coral</option>
+            <option value="emerald">Emerald</option>
+            <option value="indigo">Indigo</option>
+            <option value="teal">Teal</option>
+            <option value="amber">Amber</option>
+            <option value="ink">Ink</option>
+          </select>
+          <svg class="picker-chevron" aria-hidden="true"><use href="#i-chevron" /></svg>
+        </label>
+      </div>
     </header>
 
     <main>
