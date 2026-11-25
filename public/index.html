@@ -1,43 +1,65 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
+    <meta name="description" content="A tool for memorizing passages of scripture." />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
     <title>Scabbard</title>
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/logo192.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="stylesheet" href="/style.css" />
+    <script type="module" src="/app.js"></script>
   </head>
-  <body class="system-ui">
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+  <body>
+    <main>
+      <section id="blank" hidden>
+        <h1>Scabbard</h1>
+        <p>
+          Scabbard is a tool for memorizing passages of scripture. Search for
+          passages with a canonical reference such as “John 3:16”.
+        </p>
+        <p>
+          There are no accounts for syncing devices or any of that. The goal is
+          to have your brain remember these things, rather than computers.
+        </p>
+        <div class="buttons">
+          <button type="button" data-action="add">➕ Add a passage</button>
+        </div>
+      </section>
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+      <section id="list" hidden>
+        <h1>Passages</h1>
+        <ul id="passages"></ul>
+        <div class="buttons">
+          <button type="button" data-action="add">➕ Add passage</button>
+        </div>
+      </section>
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+      <section id="passage" hidden>
+        <h1 id="passage-title"></h1>
+        <div id="passage-text"></div>
+        <div class="buttons">
+          <a class="button" href="#/">⏎ Return to list</a>
+          <button type="button" data-action="remove">🗑 Remove from list</button>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="search">
+      <form>
+        <label for="query">📖 What passage?</label>
+        <input id="query" name="q" required autocomplete="off" placeholder="John 3:16" />
+        <p id="search-error" role="alert"></p>
+        <div class="buttons">
+          <button type="submit">Add</button>
+          <button type="button" data-action="cancel">Cancel</button>
+        </div>
+      </form>
+    </dialog>
+
+    <noscript>Scabbard needs JavaScript to run.</noscript>
   </body>
 </html>
