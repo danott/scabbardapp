@@ -25,8 +25,6 @@
       <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3" /></symbol>
       <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" /></symbol>
       <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /></symbol>
-      <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14" /></symbol>
-      <symbol id="i-restart" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.5-5.8M4 4v5h5" /></symbol>
       <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.5C10.5 5 8 4.5 3 4.5v14c5 0 7.5.5 9 2 1.5-1.5 4-2 9-2v-14c-5 0-7.5.5-9 2zM12 6.5v14" /></symbol>
     </svg>
 
@@ -66,13 +64,6 @@
           <h1>Passages</h1>
           <span id="count" class="pill-badge"></span>
         </div>
-        <div id="review-banner" class="card review-banner" hidden>
-          <div>
-            <strong id="review-count"></strong>
-            <span class="muted">Recall them from memory, then rate how it went.</span>
-          </div>
-          <button type="button" class="primary" data-action="review">Review</button>
-        </div>
         <ul id="passages" class="cards"></ul>
         <div class="dock">
           <button type="button" class="primary block" data-action="add">
@@ -86,42 +77,9 @@
           <svg><use href="#i-back" /></svg>
         </a>
         <h1 id="passage-title"></h1>
-        <p id="passage-status" class="status-line"></p>
-
-        <div class="segmented" role="group" aria-label="Practice mode">
-          <button type="button" data-mode="read">Read</button>
-          <button type="button" data-mode="blanks">Blanks</button>
-          <button type="button" data-mode="letters">Letters</button>
-          <button type="button" data-mode="type">Type</button>
-        </div>
-        <p id="mode-hint" class="mode-hint"></p>
-
-        <div id="practice-bar" class="practice-bar" hidden></div>
-
-        <div id="passage-card" class="card passage-card-text">
-          <input
-            id="type-input"
-            aria-label="Type the first letter of the next word"
-            autocomplete="off"
-            autocapitalize="none"
-            autocorrect="off"
-            spellcheck="false"
-            enterkeyhint="next"
-          />
+        <div class="card">
           <div id="passage-text"></div>
         </div>
-
-        <div id="grade" class="card grade" hidden>
-          <h2>How well did you recall it?</h2>
-          <p id="grade-note" class="muted"></p>
-          <div class="grades">
-            <button type="button" data-grade="again">Again<small></small></button>
-            <button type="button" data-grade="hard">Hard<small></small></button>
-            <button type="button" data-grade="good">Good<small></small></button>
-            <button type="button" data-grade="easy">Easy<small></small></button>
-          </div>
-        </div>
-
         <div class="buttons">
           <button type="button" class="danger" data-action="remove">
             <svg><use href="#i-trash" /></svg> Remove from list
@@ -185,8 +143,6 @@
         </div>
       </form>
     </dialog>
-
-    <div id="toast" role="status" aria-live="polite"></div>
 
     <noscript>Scabbard needs JavaScript to run.</noscript>
   </body>
